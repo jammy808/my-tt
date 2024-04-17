@@ -1,9 +1,59 @@
 "use client"
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from "axios";
 
 
 
 function page() {
+
+  const [slots, setSlots] = useState([])
+  const [tt, setTT] = useState(Array.from({ length: 9 }, () => Array(6).fill(null)))
+  const [student, setStudent] = useState()
+
+  useEffect(()=>{
+    getStudent()
+  },[])
+
+  const getStudent = async() =>{
+    const res = await axios.get("/api/users/student")
+    setStudent(res.data.data)
+    setTT(res.data.array)
+  }
+
+  const getSlots = async(id:any) => {
+    const res = await axios.post("/api/users/profile",{id})
+    setSlots(res.data.data)
+    console.log(res)
+    console.log(slots)
+  }
+
+  const addSlot = async(uid:any) =>{
+    const response = await axios.post("/api/users/add",{uid})
+    
+    const res = await axios.get("/api/users/student")
+    setStudent(res.data.data)
+    setTT(res.data.array)
+  }
+
+  const deleteSlot = async(uid:any) =>{
+    const response = await axios.post("/api/users/delete",{uid})
+
+    const res = await axios.get("/api/users/student")
+    setStudent(res.data.data)
+    setTT(res.data.array)
+  }
+
+  let displaySlots = slots.map((e:any) =>{
+    return(
+      <div><button onClick={()=>{  
+
+        const [r, c] = String(e.slotId).split('').map(Number);
+        tt[r][c] === e.subject ? deleteSlot(e.uniqueId): addSlot(e.uniqueId)
+          }}>  
+      {e.uniqueId}
+      </button></div>
+    )
+  })
   
   return (
     <>
@@ -25,8 +75,13 @@ function page() {
         <tbody>
           <tr>
             <td>9:00 - 10:00</td>
+
+            <td><button onClick={()=>{
+              getSlots(11)
+            }}>{tt[1][1] ? tt[1][1]: "select"}</button></td>
+
+
             <td></td>
-            <td>inglis</td>
             <td>hate</td>
             <td>alchemy</td>
             <td>dark arts</td>
@@ -96,10 +151,9 @@ function page() {
           </tr>
         </tbody>
       </table>
+    
+      <div>{displaySlots}</div>
 
-    
-    
-    
     </>
   )
 }

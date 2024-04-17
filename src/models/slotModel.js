@@ -3,6 +3,11 @@ import { type } from "os";
 
 const slotSchema = new mongoose.Schema({
 
+    students :{
+        type : Array,
+        default : [],
+    },
+
     slotId : {
         type : Number,
     },
@@ -22,7 +27,9 @@ const slotSchema = new mongoose.Schema({
 
     faculty :{
         type : String,
-    }
+    },
+
+    
 
 })
 
