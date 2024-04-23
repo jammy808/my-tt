@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import axios from "axios";
+  
 
 
 
@@ -14,8 +15,9 @@ function page() {
     getStudent()
   },[])
 
+
   const getStudent = async() =>{
-    const res = await axios.get("/api/users/student")
+    const res = await axios.post("/api/users/student",{id : 123})
     setStudent(res.data.data)
     setTT(res.data.array)
   }
@@ -30,7 +32,7 @@ function page() {
   const addSlot = async(uid:any) =>{
     const response = await axios.post("/api/users/add",{uid})
     
-    const res = await axios.get("/api/users/student")
+    const res = await axios.post("/api/users/student")
     setStudent(res.data.data)
     setTT(res.data.array)
   }
@@ -38,7 +40,7 @@ function page() {
   const deleteSlot = async(uid:any) =>{
     const response = await axios.post("/api/users/delete",{uid})
 
-    const res = await axios.get("/api/users/student")
+    const res = await axios.post("/api/users/student")
     setStudent(res.data.data)
     setTT(res.data.array)
   }
@@ -81,7 +83,10 @@ function page() {
             }}>{tt[1][1] ? tt[1][1]: "select"}</button></td>
 
 
-            <td></td>
+            <td><button onClick={()=>{
+              getSlots(12)
+            }}>{tt[1][2] ? tt[1][2]: "select"}</button></td>
+
             <td>hate</td>
             <td>alchemy</td>
             <td>dark arts</td>

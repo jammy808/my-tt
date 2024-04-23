@@ -27,6 +27,7 @@ export async function POST(request : NextRequest){
     
     let a = slot.capacity;
     a = a + 1;
+    if(a > 50) a = 50
     slot.capacity = a;
 
     await slot.save()
